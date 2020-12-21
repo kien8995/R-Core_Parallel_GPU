@@ -16,7 +16,8 @@ public class EdgeSpliterator implements Spliterator<Edge> {
 	public boolean tryAdvance(Consumer<? super Edge> action) {
 		if (this.lineSpliterator.tryAdvance(line -> this.line = line)) {
 			String[] line = this.line.split("\\s");
-			Edge edge = new Edge(line[0], line[1], Integer.valueOf(line[2]));
+			Edge edge = new Edge(line[0], line[1]);
+//			Edge edge = new Edge(line[0], line[1], Integer.valueOf(line[2]));
 			action.accept(edge);
 			return true;
 		}

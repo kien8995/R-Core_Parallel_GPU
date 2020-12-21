@@ -27,14 +27,14 @@ import com.aparapi.Range;
 public class Main {
 
 	static {
-		System.setProperty("com.aparapi.executionMode", "JTP");
+		System.setProperty("com.aparapi.executionMode", "GPU");
 		System.setProperty("com.aparapi.dumpProfilesOnExit", "true");
 		System.setProperty("com.aparapi.enableExecutionModeReporting", "false");
 		System.setProperty("com.aparapi.enableShowGeneratedOpenCL", "true");
 	}
 
 	// path to input/output file
-	private static final String INPUT = "FigS1.txt";
+	private static final String INPUT = "SequenceAssociation.txt";
 	private static final String OUTPUT = "output.txt";
 
 	// list to store edges
@@ -71,6 +71,11 @@ public class Main {
 	private int[] reachListColumnIndex;
 
 	public static void main(String[] args) throws Exception {
+		int mb = 1024 * 1024;
+		// Getting the runtime reference from system
+		Runtime runtime = Runtime.getRuntime();
+		System.out.println("##### Heap utilization statistics [MB] #####");
+
 		Main main = new Main();
 		main.init();
 		main.readFile();
@@ -80,6 +85,9 @@ public class Main {
 		long end = System.currentTimeMillis();
 		System.out.println(end - start);
 		main.writeTextFile();
+
+		// Print used memory
+		System.out.println("Used Memory:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
 	}
 
 	// initialize
@@ -267,7 +275,7 @@ public class Main {
 			r = Math.max(r, reachLevel[vStringToInt.get(currentVertex)]);
 
 			rCore[vStringToInt.get(currentVertex)] = r;
-			System.out.println(currentVertex + ": " + r);
+			// System.out.println(currentVertex + ": " + r);
 
 			// sequentially
 			// if (adjList.get(vStringToInt.get(currentVertex)) != null
